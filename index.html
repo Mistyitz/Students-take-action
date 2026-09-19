@@ -1,1 +1,442 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Take Action</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+        }
+        .prose-custom p { margin-bottom: 1rem; line-height: 1.7; }
+        .prose-custom ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .prose-custom ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .prose-custom h1, .prose-custom h2, .prose-custom h3 { font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #0f172a; }
+        .prose-custom h1 { font-size: 1.75rem; }
+        .prose-custom h2 { font-size: 1.5rem; }
+        .prose-custom h3 { font-size: 1.25rem; }
+        .prose-custom a { color: #0284c7; text-decoration: underline; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-sky-200">
+
+    <div id="app" class="flex-1 flex flex-col">
+
+        <!-- Header / Main Top Banner -->
+        <header class="gradient-banner text-white shadow-lg relative overflow-hidden transition-all duration-300">
+            <div class="max-w-6xl mx-auto px-6 py-12 md:py-16 text-center relative z-10">
+                <div class="inline-block bg-sky-500/20 backdrop-blur-md border border-sky-300/30 text-sky-100 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4 shadow-sm">
+                    Empowering Youth & Social Change
+                </div>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-sm">
+                    STUDENTS TAKE ACTION
+                </h1>
+                <p class="max-w-2xl mx-auto text-sky-100 text-base sm:text-lg opacity-90 font-light">
+                    Explore interactive modules, guidelines, and resource materials designed to help students lead impact-driven initiatives.
+                </p>
+            </div>
+            <!-- Decorative circles -->
+            <div class="absolute -top-12 -left-12 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-sky-400/10 rounded-full blur-2xl"></div>
+        </header>
+
+        <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col justify-center">
+
+            <!-- LANDING VIEW -->
+            <section id="view-landing" class="text-center py-12 flex flex-col items-center justify-center space-y-8">
+                <div class="p-4 bg-sky-50 rounded-full text-sky-600 mb-2 border border-sky-100 shadow-inner">
+                    <i class="fa-solid fa-graduation-cap text-5xl"></i>
+                </div>
+                <div class="max-w-md space-y-3">
+                    <h2 class="text-2xl font-bold text-slate-900">Ready to Learn & Lead?</h2>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        Click the button below to fetch and unpack the official action plan document directly into structured interactive subtabs.
+                    </p>
+                </div>
+                
+                <button id="btn-start" onclick="fetchContent()" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-sky-600 to-blue-700 rounded-2xl shadow-xl hover:shadow-sky-500/25 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-95">
+                    <span>Next</span>
+                    <i class="fa-solid fa-arrow-right ml-3 transition-transform duration-300 group-hover:translate-x-1"></i>
+                </button>
+            </section>
+
+            <!-- LOADING VIEW -->
+            <section id="view-loading" class="hidden text-center py-16 flex flex-col items-center justify-center space-y-4">
+                <div class="relative w-16 h-16">
+                    <div class="w-16 h-16 rounded-full border-4 border-sky-200 border-t-sky-600 animate-spin"></div>
+                    <i class="fa-solid fa-cloud-arrow-down absolute inset-0 flex items-center justify-center text-sky-600 text-sm"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800">Fetching Action Document...</h3>
+                <p class="text-sm text-slate-500 max-w-xs">Parsing Google Docs structure into accordion modules</p>
+            </section>
+
+            <!-- ERROR VIEW -->
+            <section id="view-error" class="hidden text-center py-12 flex flex-col items-center justify-center space-y-4">
+                <div class="p-4 bg-red-50 text-red-500 rounded-full">
+                    <i class="fa-solid fa-triangle-exclamation text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Failed to Load Document</h3>
+                <p id="error-message" class="text-slate-600 text-sm max-w-md">There was an issue parsing or fetching the requested Google Doc.</p>
+                <button onclick="fetchContent()" class="mt-4 px-6 py-2.5 bg-slate-800 text-white font-medium rounded-xl hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Try Again
+                </button>
+            </section>
+
+            <!-- ACCORDION / LIST VIEW -->
+            <section id="view-list" class="hidden space-y-6 py-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Action Plan Modules</h2>
+                        <p class="text-slate-500 text-sm">Select any item to view its details or navigate step-by-step.</p>
+                    </div>
+                    <span id="section-count" class="px-3 py-1 bg-sky-100 text-sky-800 text-xs font-semibold rounded-full">
+                        0 Subtabs
+                    </span>
+                </div>
+
+                <!-- Dropdown list rendered dynamically -->
+                <div id="accordion-container" class="space-y-3"></div>
+            </section>
+
+            <!-- DETAIL / SUBTAB VIEW -->
+            <section id="view-detail" class="hidden flex-1 flex flex-col py-4">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 flex-1 flex flex-col mb-24">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                        <div class="flex items-center space-x-3">
+                            <span id="detail-badge" class="px-3 py-1 bg-sky-100 text-sky-800 text-xs font-bold rounded-full">
+                                Module 1
+                            </span>
+                            <span class="text-slate-400 text-xs">·</span>
+                            <span class="text-xs text-slate-500" id="detail-progress-text">1 of 5</span>
+                        </div>
+                        <button onclick="showListView()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 transition">
+                            <i class="fa-solid fa-list-ul"></i> All Modules
+                        </button>
+                    </div>
+
+                    <h2 id="detail-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">
+                        Subtab Title
+                    </h2>
+
+                    <div id="detail-content" class="prose-custom text-slate-700 flex-1 overflow-y-auto">
+                        <!-- Dynamic subtab body content -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer id="bottom-bar" class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl p-4 transform translate-y-full transition-transform duration-300 z-50">
+            <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+                <button id="btn-back" onclick="navigateBack()" class="flex items-center px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 hover:border-slate-400 active:scale-95 transition-all text-sm sm:text-base">
+                    <i class="fa-solid fa-chevron-left mr-2"></i>
+                    <span>Back</span>
+                </button>
+
+                <div class="text-center hidden sm:block">
+                    <p id="bottom-subtab-title" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Current Subtab</p>
+                    <p id="bottom-subtab-name" class="text-sm font-bold text-slate-800 truncate max-w-xs">Section Name</p>
+                </div>
+
+                <button id="btn-next" onclick="navigateNext()" class="flex items-center px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold shadow-md hover:bg-sky-700 active:scale-95 transition-all text-sm sm:text-base">
+                    <span>Next</span>
+                    <i class="fa-solid fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const DOC_URL = 'https://docs.google.com/document/d/e/2PACX-1vQw1FJAU9HQgdQtvbbbcgIALfiqLEqto8YeDybDokBUrrZAHNVCbA_5zJHVGNyLneBUpVNZ2dbzWjmR/pub';
+        const CORS_PROXIES = [
+            (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+            (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`
+        ];
+
+        let parsedSections = [];
+        let currentSectionIndex = -1;
+        let navigationHistory = []; // Tracks screen state history
+
+        window.addEventListener('beforeunload', function (e) {
+            // Standard requirement: warn before site closes with 'Are you sure?'
+            const confirmationMessage = 'Are you sure?';
+            e.preventDefault();
+            e.returnValue = confirmationMessage;
+            return confirmationMessage;
+        });
+
+        function switchView(viewName) {
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-loading').classList.add('hidden');
+            document.getElementById('view-error').classList.add('hidden');
+            document.getElementById('view-list').classList.add('hidden');
+            document.getElementById('view-detail').classList.add('hidden');
+
+            const bottomBar = document.getElementById('bottom-bar');
+
+            if (viewName === 'detail') {
+                document.getElementById('view-detail').classList.remove('hidden');
+                bottomBar.classList.remove('translate-y-full');
+            } else {
+                bottomBar.classList.add('translate-y-full');
+                document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function fetchContent() {
+            switchView('loading');
+
+            let htmlText = null;
+            
+            // Try direct fetch first, fallback to proxies
+            try {
+                const res = await fetch(DOC_URL);
+                if (res.ok) htmlText = await res.text();
+            } catch (err) {
+                console.log("Direct fetch blocked or failed, trying CORS proxies...");
+            }
+
+            if (!htmlText) {
+                for (const proxyFn of CORS_PROXIES) {
+                    try {
+                        const res = await fetch(proxyFn(DOC_URL));
+                        if (res.ok) {
+                            htmlText = await res.text();
+                            break;
+                        }
+                    } catch (e) {
+                        console.error("Proxy attempt failed:", e);
+                    }
+                }
+            }
+
+            if (!htmlText) {
+                document.getElementById('error-message').textContent = 'Unable to fetch Google Doc content due to network or CORS restrictions.';
+                switchView('error');
+                return;
+            }
+
+            parseDocument(htmlText);
+        }
+
+        function parseDocument(rawHtml) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawHtml, 'text/html');
+
+            // Find Google Doc inner container
+            const docBody = doc.querySelector('.doc-content') || doc.querySelector('#contents') || doc.body;
+
+            const sections = [];
+            let currentHeading = null;
+            let currentContent = [];
+
+            // Traverse elements to extract headings/dropdown items in order
+            const children = Array.from(docBody.children);
+
+            children.forEach((el) => {
+                const tag = el.tagName.toLowerCase();
+                const text = el.textContent.trim();
+
+                // Check if element behaves like a section header (h1, h2, h3, or bold strong titles)
+                const isHeading = ['h1', 'h2', 'h3'].includes(tag) || 
+                                 (el.querySelector('strong') && text.length > 3 && text.length < 80 && el.children.length === 1);
+
+                if (isHeading && text !== '') {
+                    if (currentHeading) {
+                        sections.push({
+                            title: currentHeading,
+                            content: currentContent.join('')
+                        });
+                    }
+                    currentHeading = text;
+                    currentContent = [];
+                } else {
+                    // Clean unwanted google doc inline styles
+                    el.removeAttribute('style');
+                    currentContent.push(el.outerHTML);
+                }
+            });
+
+            // Push final section
+            if (currentHeading) {
+                sections.push({
+                    title: currentHeading,
+                    content: currentContent.join('')
+                });
+            }
+
+            // Fallback if parsing didn't find clear headers
+            if (sections.length === 0) {
+                sections.push({
+                    title: "Main Content",
+                    content: docBody.innerHTML
+                });
+            }
+
+            parsedSections = sections;
+            renderAccordion();
+            showListView();
+        }
+
+        function renderAccordion() {
+            const container = document.getElementById('accordion-container');
+            container.innerHTML = '';
+            document.getElementById('section-count').textContent = `${parsedSections.length} Subtabs`;
+
+            parsedSections.forEach((sec, idx) => {
+                const item = document.createElement('div');
+                item.className = "bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden";
+                
+                item.innerHTML = `
+                    <div class="flex items-center justify-between p-5 cursor-pointer select-none group" onclick="toggleAccordion(${idx})">
+                        <div class="flex items-center space-x-4">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-sky-50 text-sky-600 font-bold flex items-center justify-center text-sm group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                                ${idx + 1}
+                            </span>
+                            <h3 class="font-bold text-slate-800 text-base sm:text-lg group-hover:text-sky-600 transition-colors">
+                                ${escapeHtml(sec.title)}
+                            </h3>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="event.stopPropagation(); openDetail(${idx})" class="text-xs bg-sky-600 hover:bg-sky-700 text-white font-semibold px-3 py-1.5 rounded-lg transition shadow-sm">
+                                Open Subtab <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                            <i id="accordion-icon-${idx}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div id="accordion-body-${idx}" class="hidden border-t border-slate-100 bg-slate-50/50 p-6">
+                        <div class="prose-custom max-h-60 overflow-y-auto pr-2 text-sm text-slate-600 mb-4">
+                            ${sec.content || '<p class="italic text-slate-400">No additional preview content.</p>'}
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="openDetail(${idx})" class="inline-flex items-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition">
+                                Go to full subtab <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleAccordion(index) {
+            const body = document.getElementById(`accordion-body-${index}`);
+            const icon = document.getElementById(`accordion-icon-${index}`);
+            
+            const isHidden = body.classList.contains('hidden');
+            
+            // Collapse all others
+            parsedSections.forEach((_, i) => {
+                const b = document.getElementById(`accordion-body-${i}`);
+                const ic = document.getElementById(`accordion-icon-${i}`);
+                if (b) b.classList.add('hidden');
+                if (ic) ic.classList.remove('rotate-180');
+            });
+
+            if (isHidden) {
+                body.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        function showListView() {
+            navigationHistory.push('list');
+            switchView('list');
+        }
+
+        function openDetail(index) {
+            currentSectionIndex = index;
+            navigationHistory.push(`detail-${index}`);
+            renderDetailView();
+            switchView('detail');
+        }
+
+        function renderDetailView() {
+            const sec = parsedSections[currentSectionIndex];
+            if (!sec) return;
+
+            document.getElementById('detail-badge').textContent = `Module ${currentSectionIndex + 1}`;
+            document.getElementById('detail-progress-text').textContent = `${currentSectionIndex + 1} of ${parsedSections.length}`;
+            document.getElementById('detail-title').textContent = sec.title;
+            document.getElementById('detail-content').innerHTML = sec.content || '<p class="text-slate-400">No content available for this section.</p>';
+
+            // Update bottom bar controls
+            document.getElementById('bottom-subtab-name').textContent = sec.title;
+
+            const btnNext = document.getElementById('btn-next');
+            if (currentSectionIndex >= parsedSections.length - 1) {
+                btnNext.innerHTML = `<span>Finish</span> <i class="fa-solid fa-check ml-2"></i>`;
+                btnNext.className = "flex items-center px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow-md hover:bg-emerald-700 active:scale-95 transition-all text-sm sm:text-base";
+            } else {
+                btnNext.innerHTML = `<span>Next Subtab</span> <i class="fa-solid fa-chevron-right ml-2"></i>`;
+                btnNext.className = "flex items-center px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold shadow-md hover:bg-sky-700 active:scale-95 transition-all text-sm sm:text-base";
+            }
+        }
+
+        function navigateNext() {
+            if (currentSectionIndex < parsedSections.length - 1) {
+                currentSectionIndex++;
+                navigationHistory.push(`detail-${currentSectionIndex}`);
+                renderDetailView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // If on last subtab, loop back or show main list
+                showListView();
+            }
+        }
+
+        function navigateBack() {
+            // Remove current view from history
+            navigationHistory.pop();
+            const previousState = navigationHistory.pop();
+
+            if (previousState && previousState.startsWith('detail-')) {
+                const prevIdx = parseInt(previousState.split('-')[1]);
+                currentSectionIndex = prevIdx;
+                renderDetailView();
+                switchView('detail');
+            } else if (previousState === 'list') {
+                switchView('list');
+            } else {
+                // Default back to accordion list or landing
+                switchView('list');
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
